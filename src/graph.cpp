@@ -113,3 +113,10 @@ int Graph::lastTrip(const vector<Vehicle>& vehicles) {
     }
     return addedCost;
 }
+
+bool Graph::isSolved() {
+    for (bool ok : isEdgeOk) {
+        if (!ok) return false;
+    }
+    return true;
+}

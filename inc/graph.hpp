@@ -26,6 +26,7 @@ public:
     vector<Candidate> getCandidates(const vector<Vehicle>& vehicles);
     int lastTrip(const vector<Vehicle>& vehicles);
     void resetEdgeOk();
+    bool isSolved();
 private:
     void floydWarshall();
 };

@@ -11,6 +11,7 @@ int main(int argc, char** argv) {
         showUsage(argv[0]);
         return 0;
     }
+
     string filename = string(argv[1]);
 
     Graph g(filename);
@@ -42,11 +43,11 @@ int main(int argc, char** argv) {
             candidates = g.getCandidates(solution.vehicles); 
         }
 
-        // TODO: verify if all required edges were attended
-
-        solution.totalCost += g.lastTrip(solution.vehicles);
-        if (solution.totalCost < bestSolution.totalCost) {
-            bestSolution = solution;
+        if (g.isSolved()) {
+            solution.totalCost += g.lastTrip(solution.vehicles);
+            if (solution.totalCost < bestSolution.totalCost) {
+                bestSolution = solution;
+            }
         }
 
         g.resetEdgeOk();
