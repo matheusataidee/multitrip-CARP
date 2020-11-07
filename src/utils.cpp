@@ -24,15 +24,17 @@ Candidate getChosen(const vector<Candidate>& candidates, double alpha) {
         return candidates[chosenId];
 }
 
-Vehicle::Vehicle(int capacity) {
+Vehicle::Vehicle(int capacity, int startVertex) {
         remainingCapacity = capacity;
-        currentVertex = 1;
+        elapsedTime = 0;
+        currentVertex = startVertex;
 }
 
-Solution::Solution(int capacity, int nVehicles) {
+Solution::Solution(int capacity, int nVehicles, int maxTime, int carCost, int startVertex) : 
+                                                    maxTime(maxTime), carCost(carCost) {
         vehicleCapacity = capacity;
         totalCost = 0;
         for (int i = 0; i < nVehicles; i++) {
-                vehicles.push_back(Vehicle(capacity));
+                vehicles.push_back(Vehicle(capacity, startVertex));
         }
 }

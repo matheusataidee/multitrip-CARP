@@ -65,9 +65,9 @@ vector<Candidate> Graph::getCandidates(const vector<Vehicle>& vehicles) {
                                 pathCost[current][to] + edgeCost[to][from]);
             if (pathCost[current][from] + edgeCost[from][to] <
                 pathCost[current][to] + edgeCost[to][from]) {
-                candidates.push_back(Candidate(baseCost + minCost, j, i, to, endDemand));
+                candidates.push_back(Candidate(baseCost + minCost, j, i, to, endDemand, 0));
             } else {
-                candidates.push_back(Candidate(baseCost + minCost, j, i, from, endDemand));
+                candidates.push_back(Candidate(baseCost + minCost, j, i, from, endDemand, 0));
             }
         }
     }
@@ -98,9 +98,11 @@ void Graph::floydWarshall() {
 }
 
 int Graph::lastTrip(const vector<Vehicle>& vehicles) {
-    // TODO: check if car was used
     int addedCost = 0;
     for (int i = 0; i < vehicles.size(); i++) {
+
+        if (vehicles[i].edges.empty()) continue;
+
         int current = vehicles[i].currentVertex;
         addedCost += pathCost[current][disposalId]; 
     }

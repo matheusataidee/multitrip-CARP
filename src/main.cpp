@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
 
     Graph g(filename);
     
-    Solution bestSolution(0, 0);
+    Solution bestSolution(0, 0, 0, 0, 0);
     bestSolution.totalCost = INT_MAX;
 
     /* TODO: measure time for completing all iterations
@@ -23,8 +23,7 @@ int main(int argc, char** argv) {
 
     for (int iteration = 1; iteration <= 5000; iteration++) {
 
-        // TODO: pass maxTime and vehicle cost parameters to solution
-        Solution solution(g.vehicleCapacity, g.nVehicles);
+        Solution solution(g.vehicleCapacity, g.nVehicles, g.tMax, g.vehicleCost, g.startId);
 
         vector<Candidate> candidates = g.getCandidates(solution.vehicles); 
         while (!candidates.empty()) {
