@@ -18,12 +18,18 @@ int main(int argc, char** argv) {
     Solution bestSolution(0, 0);
     bestSolution.totalCost = INT_MAX;
 
+    /* TODO: measure time for completing all iterations
+           as well as time to find best solution */
+
     for (int iteration = 1; iteration <= 5000; iteration++) {
 
+        // TODO: pass maxTime and vehicle cost parameters to solution
         Solution solution(g.vehicleCapacity, g.nVehicles);
 
         vector<Candidate> candidates = g.getCandidates(solution.vehicles); 
         while (!candidates.empty()) {
+
+            // TODO: parameterize alpha
             Candidate chosen = getChosen(candidates, 0.2);
 
             solution.totalCost += chosen.cost;
@@ -35,6 +41,9 @@ int main(int argc, char** argv) {
 
             candidates = g.getCandidates(solution.vehicles); 
         }
+
+        // TODO: verify if all required edges were attended
+
         solution.totalCost += g.lastTrip(solution.vehicles);
         if (solution.totalCost < bestSolution.totalCost) {
             bestSolution = solution;

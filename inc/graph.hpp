@@ -17,6 +17,7 @@ public:
     vector<vector<double> > edgeCost;
     vector<vector<double> > edgeTime;
     vector<vector<double> > pathCost;
+    vector<vector<double> > pathTime;
     vector<vector<double> > edgeDemand;
     vector<pair<int, int> > requiredEdges;
     vector<bool> isEdgeOk;

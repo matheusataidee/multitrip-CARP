@@ -7,6 +7,7 @@ void showUsage(char* argv) {
 }
 
 void printSolution(const Solution& solution) {
+        // TODO: show time to find best solution
         cout << "Total cost: " << solution.totalCost << endl;
         for (int i = 0; i < solution.vehicles.size(); i++) {
                 cout << "Vehicle " << i << ": ";
@@ -18,6 +19,7 @@ void printSolution(const Solution& solution) {
 }
 
 Candidate getChosen(const vector<Candidate>& candidates, double alpha) {
+        // TODO: chosen should get a random from alpha % best cost, not number of candidates
         int chosenId = rand() % (int)ceil((double)candidates.size() * alpha);
         return candidates[chosenId];
 }

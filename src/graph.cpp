@@ -19,6 +19,7 @@ Graph::Graph(const string filename) {
     edgeCost = vector<vector<double> >(_n + 1, vector<double>(_n + 1, 99999999));
     edgeTime = vector<vector<double> >(_n + 1, vector<double>(_n + 1, 99999999));
     pathCost = vector<vector<double> >(_n + 1, vector<double>(_n + 1, 99999999));
+    pathTime = vector<vector<double> >(_n + 1, vector<double>(_n + 1, 99999999));
     edgeDemand = vector<vector<double> >(_n + 1, vector<double>(_n + 1, 0));
 
     for (int i = 0; i < _m; i++) {
@@ -29,6 +30,7 @@ Graph::Graph(const string filename) {
         ss >> from >> to >> cost >> time >> demand;
 
         edgeCost[from][to] = edgeCost[to][from] = pathCost[from][to] = pathCost[to][from]= cost;
+        edgeTime[from][to] = edgeTime[to][from] = pathTime[from][to] = pathTime[to][from] = time;
         edgeDemand[from][to] = edgeDemand[to][from] = demand;
 
         if (demand > 0) {
@@ -45,6 +47,7 @@ Graph::Graph(const string filename) {
 
 vector<Candidate> Graph::getCandidates(const vector<Vehicle>& vehicles) {
     vector<Candidate> candidates;
+    // TODO: use time as filter for candidates
     for (int i = 0; i < isEdgeOk.size(); i++) {
         if (isEdgeOk[i]) continue;
         for (int j = 0; j < vehicles.size(); j++) {
@@ -52,8 +55,8 @@ vector<Candidate> Graph::getCandidates(const vector<Vehicle>& vehicles) {
             if (vehicles[j].remainingCapacity >= edgeDemand[requiredEdges[i].first][requiredEdges[i].second]) {
                 endDemand = vehicles[j].remainingCapacity - edgeDemand[requiredEdges[i].first][requiredEdges[i].second];
             } else {
-                baseCost = pathCost[current][_n];
-                current = _n;
+                baseCost = pathCost[current][disposalId];
+                current = disposalId;
                 endDemand = vehicleCapacity - edgeDemand[requiredEdges[i].first][requiredEdges[i].second];
             }
             int from = requiredEdges[i].first;
@@ -79,12 +82,15 @@ void Graph::resetEdgeOk() {
 }
 
 void Graph::floydWarshall() {
-    for (int i = 1; i < _n; i++) pathCost[i][i] = 0;
+    for (int i = 1; i < _n; i++) pathCost[i][i] = pathTime[i][i] = 0;
     for (int k = 1; k <= _n; k++) {
         for (int i = 1; i <= _n; i++) {
             for (int j = 1; j <= _n; j++) {
                 if (pathCost[i][j] > pathCost[i][k] + pathCost[k][j]) {
                     pathCost[i][j] = pathCost[i][k] + pathCost[k][j];
+
+                    // This is only viable because we are assuming time = cost is true
+                    pathTime[i][j] = pathTime[i][k] + pathTime[k][j];
                 }
             }
         }
@@ -92,10 +98,11 @@ void Graph::floydWarshall() {
 }
 
 int Graph::lastTrip(const vector<Vehicle>& vehicles) {
+    // TODO: check if car was used
     int addedCost = 0;
     for (int i = 0; i < vehicles.size(); i++) {
         int current = vehicles[i].currentVertex;
-        addedCost += pathCost[current][_n]; 
+        addedCost += pathCost[current][disposalId]; 
     }
     return addedCost;
 }
