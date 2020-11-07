@@ -28,7 +28,7 @@ public:
     int carCost;
     vector<Vehicle> vehicles;
 
-    Solution(int capacity, int nVehicles, int maxTime, int carCost, int startVertex);
+    Solution(int capacity, int nVehicles, int startVertex);
 };
 
 class Candidate {

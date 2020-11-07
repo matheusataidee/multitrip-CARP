@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
 
     Graph g(filename);
     
-    Solution bestSolution(0, 0, 0, 0, 0);
+    Solution bestSolution(0, 0, 0);
     bestSolution.totalCost = INT_MAX;
 
     /* TODO: measure time for completing all iterations
@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 
     for (int iteration = 1; iteration <= 5000; iteration++) {
 
-        Solution solution(g.vehicleCapacity, g.nVehicles, g.tMax, g.vehicleCost, g.startId);
+        Solution solution(g.vehicleCapacity, g.nVehicles, g.startId);
 
         vector<Candidate> candidates = g.getCandidates(solution.vehicles); 
         while (!candidates.empty()) {
@@ -35,6 +35,7 @@ int main(int argc, char** argv) {
             solution.vehicles[chosen.vehicleId].edges.push_back(g.requiredEdges[chosen.edgeId]);
             solution.vehicles[chosen.vehicleId].currentVertex = chosen.endVertex;
             solution.vehicles[chosen.vehicleId].remainingCapacity = chosen.endCapacity;
+            solution.vehicles[chosen.vehicleId].elapsedTime += chosen.timeIncrease;
 
             g.isEdgeOk[chosen.edgeId] = true;
 

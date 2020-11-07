@@ -47,11 +47,11 @@ Graph::Graph(const string filename) {
 
 vector<Candidate> Graph::getCandidates(const vector<Vehicle>& vehicles) {
     vector<Candidate> candidates;
-    // TODO: use time as filter for candidates
     for (int i = 0; i < isEdgeOk.size(); i++) {
         if (isEdgeOk[i]) continue;
         for (int j = 0; j < vehicles.size(); j++) {
             int current = vehicles[j].currentVertex, baseCost = 0, endDemand;
+            int firstUseCost = (vehicles[j].edges.empty()) ? vehicleCost : 0;
             if (vehicles[j].remainingCapacity >= edgeDemand[requiredEdges[i].first][requiredEdges[i].second]) {
                 endDemand = vehicles[j].remainingCapacity - edgeDemand[requiredEdges[i].first][requiredEdges[i].second];
             } else {
@@ -63,11 +63,16 @@ vector<Candidate> Graph::getCandidates(const vector<Vehicle>& vehicles) {
             int to =   requiredEdges[i].second;
             int minCost = min(pathCost[current][from] + edgeCost[from][to], 
                                 pathCost[current][to] + edgeCost[to][from]);
+            Candidate candidate = Candidate(0, 0, 0, 0, 0, 0);
             if (pathCost[current][from] + edgeCost[from][to] <
                 pathCost[current][to] + edgeCost[to][from]) {
-                candidates.push_back(Candidate(baseCost + minCost, j, i, to, endDemand, 0));
+                candidate = Candidate(baseCost + minCost + firstUseCost, j, i, to, endDemand, baseCost + minCost);
             } else {
-                candidates.push_back(Candidate(baseCost + minCost, j, i, from, endDemand, 0));
+                candidate = Candidate(baseCost + minCost + firstUseCost, j, i, from, endDemand, baseCost + minCost);
+            }
+            if (vehicles[j].elapsedTime + candidate.timeIncrease + pathTime[candidate.endVertex][disposalId]
+                <= tMax) {
+                candidates.push_back(candidate);
             }
         }
     }
