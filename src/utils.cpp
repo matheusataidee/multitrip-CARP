@@ -19,8 +19,14 @@ void printSolution(const Solution& solution) {
 }
 
 Candidate getChosen(const vector<Candidate>& candidates, double alpha) {
-        // TODO: chosen should get a random from alpha % best cost, not number of candidates
-        int chosenId = rand() % (int)ceil((double)candidates.size() * alpha);
+        double minCost = candidates.front().cost;
+        double maxCost = candidates.back().cost;
+        double acceptableCost = minCost + (maxCost - minCost) * alpha;
+
+        int n = 0;
+        while (n < candidates.size() && candidates[n].cost <= acceptableCost) n++;
+
+        int chosenId = rand() % n;
         return candidates[chosenId];
 }
 
