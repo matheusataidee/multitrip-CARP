@@ -25,6 +25,8 @@ int main(int argc, char** argv) {
 
     chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     double totalTime = 0;
+    int currentIteration = 0;
+    int bestIteration = 0;
     while (totalTime < 60) {
 
         Solution solution(g.vehicleCapacity, g.nVehicles, g.startId);
@@ -52,6 +54,7 @@ int main(int argc, char** argv) {
 
                 chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
                 solution.time = chrono::duration_cast<chrono::microseconds>(end - begin).count() / (double)1000000;
+                bestIteration = currentIteration;
 
                 bestSolution = solution;
             }
@@ -61,8 +64,11 @@ int main(int argc, char** argv) {
 
         chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         totalTime = chrono::duration_cast<chrono::microseconds>(end - begin).count() / (double)1000000;
+        currentIteration++;
     }
 
+    cout << "Best solution found in iteration: " << bestIteration << endl;
+    cout << "Total number of iterations: " << currentIteration << endl;
     printSolution(bestSolution);
     return 0;
 }
