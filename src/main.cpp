@@ -1,5 +1,7 @@
 #include <iostream>
 #include <climits>
+#include <chrono>
+
 
 #include "graph.hpp"
 #include "utils.hpp"
@@ -12,6 +14,8 @@ int main(int argc, char** argv) {
         return 0;
     }
 
+    srand(0);
+
     string filename = string(argv[1]);
 
     Graph g(filename);
@@ -19,10 +23,9 @@ int main(int argc, char** argv) {
     Solution bestSolution(0, 0, 0);
     bestSolution.totalCost = INT_MAX;
 
-    /* TODO: measure time for completing all iterations
-           as well as time to find best solution */
-
-    for (int iteration = 1; iteration <= 5000; iteration++) {
+    chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    double totalTime = 0;
+    while (totalTime < 60) {
 
         Solution solution(g.vehicleCapacity, g.nVehicles, g.startId);
 
@@ -46,11 +49,18 @@ int main(int argc, char** argv) {
         if (g.isSolved()) {
             solution.totalCost += g.lastTrip(solution.vehicles);
             if (solution.totalCost < bestSolution.totalCost) {
+
+                chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+                solution.time = chrono::duration_cast<chrono::microseconds>(end - begin).count() / (double)1000000;
+
                 bestSolution = solution;
             }
         }
 
         g.resetEdgeOk();
+
+        chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        totalTime = chrono::duration_cast<chrono::microseconds>(end - begin).count() / (double)1000000;
     }
 
     printSolution(bestSolution);

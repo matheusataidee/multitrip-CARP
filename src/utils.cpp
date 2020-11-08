@@ -7,8 +7,8 @@ void showUsage(char* argv) {
 }
 
 void printSolution(const Solution& solution) {
-        // TODO: show time to find best solution
         cout << "Total cost: " << solution.totalCost << endl;
+        cout << "Found in " << solution.time << "seconds" << endl;
         for (int i = 0; i < solution.vehicles.size(); i++) {
                 cout << "Vehicle " << i << ": ";
                 for (const pair<int, int>& edge : solution.vehicles[i].edges) {

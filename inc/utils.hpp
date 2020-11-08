@@ -26,6 +26,7 @@ public:
     int vehicleCapacity;
     int maxTime;
     int carCost;
+    double time;
     vector<Vehicle> vehicles;
 
     Solution(int capacity, int nVehicles, int startVertex);
